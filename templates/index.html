@@ -1,36 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 
-    <title>🔥 3조 출석체크 🔥</title>
+    <title>응원 한마디!</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
+        rel="stylesheet" />
     <style>
         * {
-            font-family: 'Gowun Dodum', sans-serif;
+            font-family: "Noto Serif KR", serif;
         }
 
-        .mytitle {
+        .mypic {
             width: 100%;
             height: 300px;
 
             background-image: linear-gradient(0deg,
                     rgba(0, 0, 0, 0.5),
                     rgba(0, 0, 0, 0.5)),
+                /* 파일 속 이미지 연결 */
                 url("https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa42123a5-6a74-4e88-bf2a-2ab8ea897f4f%2Finnovation_camp_dongbuk22.png?id=8f9240aa-5662-4d0d-b295-13ed5a689504&table=block&spaceId=22cf7bfc-144a-4d3c-bfe9-638176135a87&width=2000&userId=15065ffa-29e2-4c82-b3f2-2b222545bf3a&cache=v2");
             background-position: center;
             background-size: cover;
+            background-position: center;
 
             color: white;
 
@@ -40,195 +43,113 @@
             justify-content: center;
         }
 
-        .mytitle>button {
-            width: 200px;
-            height: 50px;
-
-            background-color: transparent;
-            color: white;
-
-            border-radius: 50px;
-            border: 1px solid white;
-
-            margin-top: 10px;
-        }
-
-        .mytitle>button:hover {
-            border: 2px solid white;
-        }
-
-        .mycomment {
-            color: gray;
-        }
-
-        .mycards {
-            margin: 40px auto 0px auto;
-            width: 95%;
-            max-width: 1200px;
-        }
-
         .mypost {
             width: 95%;
             max-width: 500px;
-            margin: 20px auto 0px auto;
+            margin: 20px auto 20px auto;
+
+            box-shadow: 0px 0px 3px 0px black;
             padding: 20px;
-            box-shadow: 0px 0px 3px 0px gray;
-
-            display: none;
         }
 
-        .mybtns {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-
-            margin-top: 20px;
+        .mypost>button {
+            margin-top: 15px;
         }
 
-        .mybtns>button {
-            margin-right: 10px;
+        .mycards {
+            width: 95%;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .mycards>.card {
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
     </style>
-
     <script>
         $(document).ready(function () {
-            listing();
+            show_comment();
         });
 
-        function posting() {
-            let totaltime = $('#url').val()
+        function save_comment() {
+            let name = $('#name').val()
             let comment = $('#comment').val()
-            let star = $('#star').val()
 
             let formData = new FormData();
-            formData.append("url_give", url);
+            formData.append("name_give", name);
             formData.append("comment_give", comment);
-            formData.append("star_give", star);
 
-            fetch('/movie', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
-                alert(data['msg'])
+            fetch('/guestbook', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+                alert(data["msg"]);
                 window.location.reload()
+            });
+        }
+
+        function show_comment() {
+            fetch('/guestbook').then((res) => res.json()).then((data) => {
+                let rows = data['result']
+                console.log(rows)
+                $('#comment-list').empty()
+                rows.forEach((a) => {
+                    let name = a['name']
+                    let comment = a['comment']
+                    let num = a['num']
+
+                    let temp_html = `<div class="card">
+                                        <div class="card-body">
+                                            <blockquote class="blockquote mb-0">
+                                                <p>${comment}</p>
+                                                <footer class="blockquote-footer">${name}</footer>
+                                            </blockquote>
+                                            <button onclick="del(${num})" type="button" class="btn btn-outline-dark">삭제</button>
+                                        </div>
+                                </div>`
+                    $('#comment-list').append(temp_html)
+                })
             })
         }
 
-        function open_box() {
-            $('#post-box').show()
-            $('#checkcheck').text('출석체크 완료 🔥')
-
-        }
-        function close_box() {
-            $('#post-box').hide()
-        }
-
-        let checkinTime;
-        let checkoutTime;
-
-        function checkin() {
-            const clockContainer = document.querySelector(".js-clock");
-            const clockTitle = clockContainer.querySelector('.js-title');
-
-            function getTime() {
-                const now = new Date();
-                const elapsedTime = Math.floor((now - checkinTime) / 1000);
-                const hours = Math.floor(elapsedTime / 3600);
-                const minutes = Math.floor((elapsedTime % 3600) / 60);
-                const seconds = elapsedTime % 60;
-
-                clockTitle.innerHTML = `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
-            }
-
-            function init() {
-                checkinTime = new Date();
-                getTime();
-                timerInterval = setInterval(getTime, 1000);
-                updateCheckinTime();
-                updateCheckoutTime();
-            }
-
-            init();
-        }
-
-        function updateCheckinTime() {
-            const checkinTimeElement = document.querySelector(".checkin-time");
-            checkinTimeElement.textContent = formatTime(checkinTime);
-        }
-
-        function checkout() {
-            clearInterval(timerInterval);
-            checkoutTime = new Date();
-            updateCheckoutTime();
-        }
-
-        function updateCheckoutTime() {
-            const checkoutTimeElement = document.querySelector(".checkout-time");
-            if (checkoutTime) {
-                checkoutTimeElement.textContent = formatTime(checkoutTime);
-            }
-        }
-
-        function formatTime(time) {
-            const hours = time.getHours();
-            const minutes = time.getMinutes();
-            const seconds = time.getSeconds();
-            return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+        function del(num) {
+            $.ajax({
+                type: "POST",
+                url: "/guestbook/delete",
+                data: { num_give: num },
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
         }
     </script>
 </head>
 
 <body>
-    <div class="mytitle">
-        <h1>3조 출석체크</h1>
-        <button id="checkcheck" onclick="open_box()">출석체크</button>
+    <div class="mypic">
+        <h1>응원 페이지</h1>
     </div>
-    <div class="mypost" id="post-box">
-        <div class="mybucket">
-            <h3>체크인 시간:</h3>
-            <h3 class="checkin-time"></h3>
-            <button onclick="checkin()" type="button" class="btn btn-outline-primary">체크인</button>
+    <div class="mypost">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="name" placeholder="url" />
+            <label for="floatingInput">닉네임</label>
         </div>
-        <div class="mybucket">
-            <h3>체크아웃 시간:</h3>
-            <h3 class="checkout-time"></h3>
-            <button onclick="checkout()" type="button" class="btn btn-outline-primary">체크아웃</button>
+        <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="comment"
+                style="height: 100px"></textarea>
+            <label for="floatingTextarea2">응원 한마디!</label>
         </div>
-        <div class="js-clock">
-            <h1 class="js-title">00:00:00</h1>
-        </div>
-        <script src="clock.js"></script>
-        <div class="mybtns">
-            <button onclick="posting()" type="button" class="btn btn-dark">기록하기</button>
-            <button onclick="close_box()" type="button" class="btn btn-outline-dark">닫기</button>
-        </div>
+        <button onclick="save_comment()" type="button" class="btn btn-outline-secondary">응원 남기기</button>
     </div>
-
-    <div class="mod">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            멤버 카드
-        </button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">${이름} profile</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>취미: ${hobby}</p>
-                        <p>TIL: ${til_url}</p>
-                        <p>찔러보기 버튼</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
-                    </div>
-                </div>
+    <div class="mycards" id="comment-list">
+        <div class="card">
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>코딩 열정 너무 멋져요!</p>
+                    <footer class="blockquote-footer">코딩맨</footer>
+                </blockquote>
             </div>
         </div>
     </div>
-
 </body>
 
 </html>

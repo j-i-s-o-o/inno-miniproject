@@ -73,36 +73,69 @@
         });
 
         function save_comment() {
-            let name = $('#name').val()
             let comment = $('#comment').val()
 
             let formData = new FormData();
-            formData.append("name_give", name);
             formData.append("comment_give", comment);
 
-            fetch('/questionbook', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
-                alert(data["msg"]);
+            fetch('/api/Question_Debug/add', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+                alert(data["result"]);
                 window.location.reload()
             });
         }
 
         function show_comment() {
-            fetch('/questionbook').then((res) => res.json()).then((data) => {
+            fetch('api/Question_Debug/Load').then((res) => res.json()).then((data) => {
                 let rows = data['result']
                 console.log(rows)
                 $('#comment-list').empty()
-                rows.forEach((a) => {
-                    let name = a['name']
-                    let comment = a['comment']
-                    let num = a['num']
+                data['comment'].forEach((a) => {
+                    /*
+                    'WriteID': id
+                    'WriteNick': nick
+                    'book': num
+                    'Text': text
+                    */
+                    let name = a['WriteNick']
+                    let comment = a['Text']
+                    let num = a['book']
 
+                    let btnstring = a['WriteID'] == data['getID'] ?
+                        `<button id="editbtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">수정</button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">
+                                            질문을 수정해보세요!
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea">
+                                            </textarea>
+                                            <label for="floatingTextarea">${comment}</label>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button onclick="modify(int(${num}))" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                            수정 완료
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="del(${num})" type="button" class="btn btn-outline-dark">삭제</button>`
+                        : ``;
                     let temp_html = `<div class="card">
                                         <div class="card-body">
-                                            <blockquote class="blockquote mb-0">
-                                                <p>${comment}</p>
+                                            <blockquote id="comme" class="blockquote mb-0">
+                                                <p id="p1">${comment}</p>
                                                 <footer class="blockquote-footer">${name}</footer>
-                                            </blockquote>                                           
-                                            <button onclick="del(${num})" type="button" class="btn btn-outline-dark">삭제</button>
+                                            </blockquote>
+
+                                            ${btnstring}
                                         </div>
                                     </div>`
                     $('#comment-list').append(temp_html)
@@ -110,13 +143,25 @@
             })
         }
 
+        function modify(num) {
+            $.ajax({
+                type: "POST",
+                url: "/questionbook/modify",
+                data: { num_give: num, comment_give: comment },
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
+        }
+
         function del(num) {
             $.ajax({
                 type: "POST",
-                url: "/questionbook/delete",
+                url: "/api/Question_Debug/Remove",
                 data: { num_give: num },
                 success: function (response) {
-                    alert(response["msg"])
+                    alert(response['result'])
                     window.location.reload()
                 }
             });

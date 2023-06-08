@@ -29,15 +29,6 @@ def questionbook_get():
     all_comments = list(db.cheer.find({},{'_id':False}))
     return jsonify({'result': all_comments})
 
-# @app.route("/questionbook/modify", methods=["POST"])
-# def questionbook_modify():
-#     num_receive = request.form['num_give']
-#     comment_receive = request.form['comment_give']
-
-#     db.cheer.update_one({'num':int(num_receive)},{'$set':{'comment':comment_receive}})
-
-#     return jsonify({'msg': '질문 수정 완료!'})
-
 @app.route("/questionbook/delete", methods=["POST"])
 def questionbook_delete():
     num_receive = request.form['num_give']

@@ -80,14 +80,14 @@
             formData.append("name_give", name);
             formData.append("comment_give", comment);
 
-            fetch('/guestbook', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+            fetch('/questionbook', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
                 alert(data["msg"]);
                 window.location.reload()
             });
         }
 
         function show_comment() {
-            fetch('/guestbook').then((res) => res.json()).then((data) => {
+            fetch('/questionbook').then((res) => res.json()).then((data) => {
                 let rows = data['result']
                 console.log(rows)
                 $('#comment-list').empty()
@@ -101,10 +101,10 @@
                                             <blockquote class="blockquote mb-0">
                                                 <p>${comment}</p>
                                                 <footer class="blockquote-footer">${name}</footer>
-                                            </blockquote>
+                                            </blockquote>                                           
                                             <button onclick="del(${num})" type="button" class="btn btn-outline-dark">삭제</button>
                                         </div>
-                                </div>`
+                                    </div>`
                     $('#comment-list').append(temp_html)
                 })
             })
@@ -113,7 +113,7 @@
         function del(num) {
             $.ajax({
                 type: "POST",
-                url: "/guestbook/delete",
+                url: "/questionbook/delete",
                 data: { num_give: num },
                 success: function (response) {
                     alert(response["msg"])

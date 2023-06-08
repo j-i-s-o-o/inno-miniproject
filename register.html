@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+    <head>
+
+        <!-- Webpage Title -->
+        <title>Hello, world!</title>
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bulma CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+        <script>
+            $( document ).ready(function() {
+                
+            });
+            // 간단한 회원가입 함수입니다.
+            // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
+            function register() {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/register",
+                    data: {
+                        id_give: $('#userid').val(),
+                        pw_give: $('#userpw').val(),
+                        nickname_give: $('#usernick').val()
+                    },
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            alert('회원가입이 완료되었습니다.')
+                            window.location.href = '/login'
+                        } else {
+                            alert(response['result'])
+                        }
+                    }
+                })
+            }
+            function erazertoken(){
+                window.location.href = '/login';
+            }
+            
+            function outfocus_id(){
+                $.ajax({
+                    type: "POST",
+                    url: "/api/id_check",
+                    data: {
+                        id_give: $('#userid').val(),
+                    },
+                    success: function (response) {
+                        if (response['result'] != 'success') {
+                            document.getElementById("useridaccess").innerHTML = "* 사용가능한 ID입니다.";
+                        } else {
+                            document.getElementById("useridaccess").innerHTML = "* 사용불가능한 ID입니다.";
+                        }
+                    }
+                })
+            }
+
+            function outfocus_nick(){
+                $.ajax({
+                    type: "POST",
+                    url: "/api/nick_check",
+                    data: {
+                        nickname_give: $('#usernick').val(),
+                    },
+                    success: function (response) {
+                        if (response['result'] != 'success') {
+                            document.getElementById("usernickaccess").innerHTML = "* 사용가능한 닉네임입니다.";
+                        } else {
+                            document.getElementById("usernickaccess").innerHTML = "* 사용불가능한 닉네임입니다.";
+                        }
+                    }
+                })
+            }
+            
+        </script>
+    </head>
+    <body>
+        <div class="section has-text-centered">
+            <h1 class="title">회원가입 페이지</h1>
+            <div class="container" style="width:60%">
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label" for="userid">ID</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input type="text" class="input" id="userid" aria-describedby="emailHelp"
+                                       placeholder="My ID" value="" >
+                                <label id="useridaccess"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label" for="userpw">PW</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input type="password" class="input" id="userpw" placeholder="My Password">
+                                <ul id="userpwaccess">
+                                    <li>X lower a</li>
+                                    <li>X 8 - 12 char</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label" for="usernick">NICKNAME</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input type="text" class="input" id="usernick" placeholder="My Nickname">
+                                <label id="usernickaccess"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="button is-primary" onclick="register()">회원가입</button>
+                <button class="button is-primary" onclick="erazertoken()">로그인</button>
+            </div>
+        </div>
+        <script>
+            const id_text = document.getElementById("userid");
+            const pw_text = document.getElementById("userpw");
+            const nick_text = document.getElementById("usernick");
+            const pw_access = document.querySelectorAll("#userpwaccess > li");
+
+            /* iD Check */
+            id_text.addEventListener("focus", (e) =>{
+                document.getElementById("useridaccess").innerHTML = "";
+            });
+            id_text.addEventListener("blur", (e) =>{
+                let c = e.target.value.length;
+                
+                const regex = /^[a-z0-9]+$/;
+                if(!regex.test(e.target.value)){
+                    document.getElementById("useridaccess").innerHTML = "* 영소문자, 숫자로만 가능";
+                    return;
+                }
+                if(c > 4)
+                    outfocus_id();
+                else
+                    document.getElementById("useridaccess").innerHTML = "* 5글자 이상 입력";
+            });
+
+            /* Nick Check */
+            nick_text.addEventListener("focus", (e) =>{
+                document.getElementById("usernickaccess").innerHTML = "";
+            });
+            nick_text.addEventListener("blur", (e) =>{
+                let c = e.target.value.length;
+                
+                const regex = /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]+$/;
+                if(!regex.test(e.target.value)){
+                    document.getElementById("usernickaccess").innerHTML = "* 글자 및 숫자만 가능";
+                    return;
+                }
+                if(c > 4)
+                    outfocus_nick();
+                else
+                    document.getElementById("usernickaccess").innerHTML = "* 5글자 이상 입력";
+            });
+            
+            /* PW Check */
+            pw_text.addEventListener("input", (e) =>{
+                let c = e.target.value.length;
+                let d = e.target.value;
+                const pw_access = document.querySelectorAll("#userpwaccess > li");
+                
+                const regex = /^[a-z0-9]+$/;
+                if(!regex.test(d) || "" == d){
+                    pw_access[0].innerHTML = "X lower a";
+                }
+                else{
+                    pw_access[0].innerHTML = "V lower a";
+                }
+                if(c >= 8 && c <= 12){
+                    pw_access[1].innerHTML = "V 8 - 12 char";
+                }
+                else{
+                    pw_access[1].innerHTML = "X 8 - 12 char";
+                }
+            })
+
+        {% if user_id %}
+            id_text.setAttribute("value","{{user_id}}");
+            pw_text.focus();
+            document.getElementById("useridaccess").innerHTML = "* 사용가능한 ID 입니다.";
+        {% else %}
+            id_text.focus();
+        {% endif %}
+        </script>
+    </body>
+</html>

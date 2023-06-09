@@ -1,0 +1,112 @@
+@import url(style.css);
+
+body {
+  z-index: -9999;
+  width: 100%;
+  height: 100vh;
+
+  background-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url("../img/title_bg.png");
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 메인 */
+main {
+  top: 50px;
+  background: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.signup {
+  background: var(--bg-color);
+  width: 40vw;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.signup_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.register_container {
+  display: flex;
+  justify-content: space-between;
+}
+.field_container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.field.is-horizontal {
+  width: 300px;
+  justify-content: right;
+}
+.field-label.id {
+  width: 30px;
+}
+.control.id {
+  width: 230px;
+  height: 90px;
+}
+.field-label.pw {
+  width: 30px;
+}
+.control.pw {
+  width: 230px;
+  height: 90px;
+}
+.control.nick {
+  width: 230px;
+  height: 90px;
+}
+
+.control input {
+  padding: 0.8em;
+  outline: none;
+  border: 2px solid rgb(200, 200, 200);
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+.regitBtns {
+  font-family: "SUITE-Regular";
+  background-color: var(--main-color);
+  border-color: none;
+  border-width: 1px;
+  color: white;
+  cursor: pointer;
+  justify-content: center;
+  padding-bottom: calc(0.5em - 1px);
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: calc(0.5em - 1px);
+  text-align: center;
+  white-space: nowrap;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+}
+
+.regitBtns:hover {
+  color: white;
+  background: var(--hover-color);
+}

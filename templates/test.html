@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>출석체크 프로그램</title>
+  <link rel="stylesheet" type="text/css" href="static/css/style.css">
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+  <style>
+  </style>
+  <script>
+    let checkinTime;
+    let checkoutTime;
+
+    function checkin() {
+        // 초기화
+        window.location.reload();
+        // let checkinTimeElement = document.querySelector(".checkin-time");
+        // let checkoutTimeElement = document.querySelector(".checkout-time");
+        // checkinTimeElement.textContent = "";
+        // checkoutTimeElement.textContent = "";
+
+
+        // let clockContainer = document.querySelector(".js-clock");
+        let clockTitle = clockContainer.querySelector('.js-clock > .js-title');
+        // let checkinButton = document.querySelector(".checkin-button");
+        // // 체크아웃 버튼으로 변경
+        // checkinButton.textContent = "체크아웃";
+        // // 체크아웃 기능으로 변경
+        // checkinButton.onclick = checkout;
+        
+        function save_check_in_time() {
+            let checkin_time = Date.now();
+            let formData = new FormData();
+            formData.append("CheckInTime", checkin_time);
+
+            fetch('/api/time/checkin_debug', { method: "POST", body: formData })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(data["result"]);
+              });
+        }
+        save_check_in_time();
+        function getTime(nowtime) {
+            const now = new Date(Date.now() - nowtime);
+            const elapsedTime = Math.floor((now - checkinTime - pausedTime) / 1000);
+            const hours = Math.floor(elapsedTime / 3600);
+            const minutes = Math.floor((elapsedTime % 3600) / 60);
+            const seconds = elapsedTime % 60;
+            now.getHours
+
+            const clockTitle = document.querySelector('.js-title');
+            clockTitle.innerHTML = `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+        }
+
+        // function updateCheckinTime() {
+        //     let checkinTimeElement = document.querySelector(".checkin-time");
+        //     checkinTimeElement.textContent = formatTime(checkinTime);
+        // }
+        // updateCheckinTime();
+        //init();
+    }
+
+    function checkout() {
+        let checkinButton = document.querySelector(".checkin-button");
+        clearInterval(tid);
+        checkoutTime = new Date(); // 현재 시간 가져오기
+        updateCheckoutTime();
+        // // 체크인 버튼으로 변경
+        // checkinButton.textContent = "체크인";
+        // // 체크인 기능으로 변경
+        // checkinButton.onclick = checkin;
+
+    function updateCheckoutTime() {
+        let checkoutTimeElement = document.querySelector(".checkout-time");
+        if (checkoutTime) {
+            checkoutTimeElement.textContent = formatTime(checkoutTime);
+        } else {
+            checkoutTimeElement.textContent = ""; // 초기화
+        }
+      }
+      function save_check_out_time() {
+            let checkout_time = Date.now();
+            let formData = new FormData();
+            formData.append("CheckOutTime", checkout_time);
+
+            fetch('/api/time/checkout_debug', { method: "POST", body: formData })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(data["result"]);
+              });
+        }
+        updateCheckoutTime();
+        save_check_out_time();
+    }
+
+
+
+   
+    $(document).ready(()=>{
+      load_checkin_time();
+      load_checkout_time();
+    })
+    window.onload = function() {
+        tid=setInterval('msg_time()',1000) //이해
+    };
+    // var SetTime = elapsedSeconds;
+    function msg_time() {	// 1초씩 카운트
+      SetTime++;
+      // m = Math.floor(SetTime / 60) + ": " + (SetTime % 60) + "";	// 남은 시간 계산
+      let hours = Math.floor(SetTime / 3600);
+      let minutes = Math.floor((SetTime % 3600) / 60);
+      let seconds = SetTime % 60;
+      CountTime = `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        
+      var msg = "<font color='black'>" + CountTime + "</font>";
+      
+      document.querySelector(".js-clock > .js-title").innerHTML = msg;		// div 영역에 보여줌 
+              
+      					// 1초씩 증가
+      // 경과된 시간,  
+      CountTime_date = new Date(`1970-01-01T${CountTime}Z`);
+    }
+    
+    function formatTime(time) {
+        const hours = time.getHours();
+        const minutes = time.getMinutes();
+        const seconds = time.getSeconds();
+        return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    }
+    function load_checkin_time() {
+        fetch('/api/time/read_checkin_time_debug')
+            .then((res) => res.json())
+            .then((data) => {
+            const checkinTimeString = data["CheckInTime"];
+            
+            // 체크아웃 flag일때, 타이머 종료
+            const flag = data["Flag"];
+            if(flag != true){
+              clearInterval(tid);
+            }
+            let checkinButton = document.querySelector(".checkin-button");
+            // 체크인 시간 db 에 있는지 확인 // 체크인시간이 있으며, flag(체크아웃상태가 아닐때) 
+            if(flag == true){
+              // // 체크아웃 버튼으로 변경
+              // checkinButton.textContent = "체크아웃";
+              // // 체크아웃 기능으로 변경
+              // checkinButton.onclick = checkout;
+            }
+
+            checkinTime = new Date(+checkinTimeString); // 문자열을 숫자로 변환하여 Date 객체로 생성
+              // 현재시간 -체크인시간
+            const currentTime = new Date();
+            const elapsedTime = currentTime - checkinTime;
+            const elapsedSeconds = Math.floor(elapsedTime / 1000);
+            console.log(elapsedSeconds + "초");
+
+            // 체크인 시간 업데이트
+            const checkinTimeElement = document.querySelector(".checkin-time");
+            checkinTimeElement.textContent = formatTime(checkinTime);
+
+            // SetTime에 elapsedSeconds 저장// 현재시간 -체크인시간
+            SetTime = elapsedSeconds;
+        });
+    }
+    
+    function load_checkout_time() {
+        fetch('/api/time/read_checkout_time_debug')
+            .then((res) => res.json())
+            .then((data) => {
+              
+            const flag = data["Flag"];
+            const checkoutTimeString = data["CheckOutTime"];
+            // if(checkoutTimeString !=""){
+            //   new Date(+checkoutTimeString);
+            //   const checkoutTimeElement = document.querySelector(".checkout-time");
+            //   checkoutTimeElement.textContent = formatTime(checkoutTime);
+            // }
+            if(flag != true){
+              // 체크아웃 시간 업데이트
+              checkoutTime = new Date(+checkoutTimeString); // 문자열을 숫자로 변환하여 Date 객체로 생성
+              const checkoutTimeElement = document.querySelector(".checkout-time");
+              checkoutTimeElement.textContent = formatTime(checkoutTime);
+              // console.log("체크아웃 시간 업데이트  확인");
+            }
+            
+            
+
+            // checkoutTime = new Date(+checkoutTimeString); // 문자열을 숫자로 변환하여 Date 객체로 생성
+
+            // const currentTime = new Date();
+            // const elapsedTime = currentTime - checkinTime;
+            // const elapsedSeconds = Math.floor(elapsedTime / 1000);
+            // console.log(elapsedSeconds + "초");
+
+
+        });
+    } 
+    // // 일시정지
+    // let pausetime;
+    // function pauseTimer() {
+    //     // 일시정지 기능을 구현할 내용 추가
+    //     pausetime = Date.now();
+    //     clearInterval(tid);
+    //     function save_pauseTimer() { // 수정되는 db로 작성 필요
+    //         let pause_time = Date.now();
+    //         let formData = new FormData();
+    //         formData.append("PauseTime", pause_time);
+
+    //         fetch('/api/time/pause_debug', { method: "POST", body: formData })
+    //           .then((res) => res.json())
+    //           .then((data) => {
+    //             console.log(data["result"]);
+    //           });
+    //     }
+    //     save_pauseTimer();
+    //     // 일시정지 버튼을 재개 버튼으로 변경
+    //     const pauseButton = document.querySelector(".pause-button");
+    //     pauseButton.textContent = "재개";
+    //     pauseButton.onclick = resumeTimer;
+    // }
+    // // 재시작
+    // function resumeTimer() {
+
+
+    //     function load_pausetime() {
+    //       fetch('/api/time/read_Pause_time_debug')
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //         let pauseTimeString = data["PauseTime"];
+    //         })
+    //         console.log("as"+pauseTimeString);
+    //         return Date.now(+pauseTimeString);
+    //       }
+    //     // setInterval(tid);
+    //     // 재시작 기능을 구현할 내용 추가
+    //     let lesstime = Date.now() - load_pausetime();
+    //     console.log(Math.floor(lesstime / 1000)+"초");
+    //     console.log(Math.floor(lesstime / 1000)+"초");
+
+    //     // mu += Math.floor(lesstime / 1000);
+
+        
+
+    //     function save_LessTimer() { // 수정되는 db로 작성 필요// 기존 경과시간에 중첩되게
+    //         let Less_time = Date.now();
+    //         let formData = new FormData();
+    //         formData.append("LessTime", Less_time);
+
+    //         fetch('/api/time/less_debug', { method: "POST", body: formData })
+    //           .then((res) => res.json())
+    //           .then((data) => {
+    //             console.log(data["result"]);
+    //           });
+    //     }
+    //     // 재개 버튼을 일시정지 버튼으로 변경
+    //     const pauseButton = document.querySelector(".pause-button");
+    //     pauseButton.textContent = "일시정지";
+    //     pauseButton.onclick = pauseTimer;
+  
+    //   }
+  
+
+  </script>
+</head>
+<body>
+    <div class="container">
+        <div class="attendance-form">
+            <h1>출석체크 프로그램</h1>
+            <div class="mybucket">
+                <h3>체크인 시간:</h3>
+                <h3 class="checkin-time" id="checkin_time"></h3>
+                <button class="checkin-button" onclick="checkin()" type="button" class="checkin-button">체크인</button>
+            </div>
+            <div class="mybucket">
+                <h3>체크아웃 시간:</h3>
+                <h3 class="checkout-time" id="checkout_time"></h3>
+                <button onclick="pauseTimer()" type="button" class="pause-button">일시정지</button>
+            </div>
+            <div class="js-clock">
+                <h1 class="js-title">00:00:00</h1>
+            </div>
+        </div>
+
+        <div class="namebox-form">
+            <ul>
+                <li class='name_color'>한정은</li>
+            </ul>
+            <ul>
+                <li class='name_color'>한정은</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

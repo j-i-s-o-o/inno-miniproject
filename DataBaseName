@@ -1,0 +1,60 @@
+db.user
+{
+    'ID':id,
+    'PW':pw_hash,
+    'NickName':nick,
+    //
+    'Info':db.['NickName'].info
+    'Timer':db.['NickName'].timer
+    'Guest_book':db.['NickName'].guest
+    //
+}
+db.user.info{
+    'NickName':nick,
+    'Image_url':'null'
+    'Image_boolean' : True,
+    'Hobby':'',
+    'Hobby_boolean' : True,
+    'TIL_url':'',
+    'TIL_boolean': True
+    'Image_delete_url': 'null', // 삭제용
+}
+db.user.timer{
+    'NickName':nick,
+    'CheckInTime': 0,
+    'CheckOutTime': 0,
+    'LessTime':0,
+    'PauseTime':0,
+    //Timertime(HTML) = Date.now() - CheckInTime- (LessTime1 + (Date.now() - pausetime)2) lesstime = lesstime1 +lesstime2
+    //pausetime   resumetime(=Date.now()) - pausetime(db) = LessTime(db)
+    //resumetime 
+    'Flag':false,
+    'TimerOn':false 
+}
+db.user.guest{
+    'WriteID': id
+    'WriteNick': nick
+    'book': num
+    'Text': text
+    'Respo': db.['NickName'].guest.['book']
+}
+db.user.guest.['book']{
+    'WriteID': id
+    'WriteNick': nick
+    'Text': text
+}
+db.QuestionBook{
+    'WriteID': id
+    'WriteNick': nick
+    'book': num
+    'Text': text
+    'Respo': db.QuestionBook.['book']
+}
+db.QuestionBook.Reply{
+    'WriteID': id
+    'WriteNick': nick
+    'Text': text
+}
+db.dummy.image{
+    'Image_url' : del_url
+}

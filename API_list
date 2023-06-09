@@ -1,0 +1,35 @@
+[회원가입 API]
+[로그인 API]
+[유저 정보 확인 API]
+[아이디 정보 확인 API]
+[닉네임 정보 확인 API]
+[가입자 정보 확인 API] 
+[사용자 정보 확인 API] 
+[mypage API]
+    1. [all_change] #CRACKED
+    2. [get_infomation]
+    3. [image upload]
+    4. [Other upload]
+    5. [Password upload]
+    6. [NickName upload] # HALF
+[mypage API] Debug
+    1. [get_infomation] Debug
+    2. [image upload] Debug
+    3. [Other upload] Debug
+[타이머 API]
+    1. [read_timer]
+    2. [checkin]
+    3. [read_checkin_time]
+    4. [checkout]
+[타이머 API Debug] Debug
+    1. [read_timer]
+    2. [checkin] method (POST)
+    4. [checkin] method (GET) = read_checkin_time
+    3. [checkout] method (POST)
+    5. [checkout] method (GET) = read_checkout_time
+    6. [pause] method (POST) = 'TimerOn' ? LessTime.update : PauseTime.update
+    7. [pause] method (GET) = read_pause_time[PauseTime, LessTime], 'TimerOn' : boolean
+[질문방 API] Debug
+    1. [Question add]
+    2. [Question Load]
+    3. [Question Remove]

@@ -1,0 +1,205 @@
+@import url(style.css);
+
+body {
+  z-index: -9999;
+  width: 100%;
+  height: 100vh;
+
+  background-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url("../img/title_bg.png");
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 메인 */
+main {
+  position: relative;
+  background: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+nav {
+  position: absolute;
+  top: 50px;
+  right: -7rem;
+  width: 7rem;
+  display: flex;
+  flex-direction: column;
+}
+nav button {
+  color: var(--bg-color);
+  box-sizing: content-box;
+  width: 6rem;
+  border: none;
+  height: 60px;
+  padding-right: 1rem;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin: 0.5rem 0;
+  text-align: right;
+  transition: all 0.3s;
+}
+nav button:first-child {
+  background: var(--main-color);
+}
+nav button:first-child:hover {
+  padding-left: 0.5rem;
+}
+nav button:nth-child(2) {
+  background: var(--point-color);
+}
+nav button:nth-child(2):hover {
+  padding-left: 0.5rem;
+}
+nav button:nth-child(3) {
+  background: var(--third-color);
+}
+nav button:nth-child(3):hover {
+  padding-left: 0.5rem;
+}
+.time {
+  background: var(--bg-color);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.time h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 6rem;
+  padding-bottom: 1rem;
+}
+.timeBtns {
+  background: var(--bg-color);
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+.timeBtns button {
+  width: 100px;
+  height: 50px;
+  font-weight: 550;
+}
+.timeBtns button:hover {
+  background: var(--hover-color);
+  color: white;
+}
+.members {
+  background: var(--bg-color);
+  color: black;
+  width: 60vw;
+  height: 15rem;
+  display: grid;
+  padding: 1rem 2rem;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-auto-rows: minmax(200px, auto);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.mem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  margin-top: 1rem;
+  background: white;
+  transition: all 0.3s;
+  cursor: pointer;
+  padding: 2rem;
+}
+.mem:hover {
+  background: var(--main-color);
+  color: white;
+}
+.mem_name {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.mem p {
+  margin-bottom: 0.5rem;
+}
+/* members 스크롤바 */
+.members::-webkit-scrollbar {
+  width: 10px; /* 스크롤바의 너비 */
+}
+.members::-webkit-scrollbar-thumb {
+  height: 30%; /* 스크롤바의 길이 */
+  background: var(--main-color); /* 스크롤바의 색상 */
+  border-radius: 10px;
+}
+
+.members::-webkit-scrollbar-track {
+  background: #00b89036; /*스크롤바 뒷 배경 색상*/
+  border-radius: 10px;
+}
+
+/* 모달 창 */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.modal-content {
+  padding: 1rem;
+  border-radius: 20px;
+}
+.btn-close:active,
+.btn-close:focus {
+  outline: none;
+  box-shadow: none;
+}
+.mem_img {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.mem_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mem_info {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  place-items: center;
+}
+.mem_info-hobbys {
+  display: flex;
+}
+.modal-header,
+.modal-footer {
+  border: none;
+}
+
+.mem_info-alert {
+  width: 200px;
+  height: 50px;
+}
+
+.mem_info-alert:hover {
+  background: var(--hover-color);
+  color: white;
+}
+
+.mainBtn {
+  margin: 0 0.5rem;
+}

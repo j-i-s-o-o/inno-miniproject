@@ -1,0 +1,145 @@
+<main>
+    <div class="title">Stydy-Log</div>
+        <nav>
+            <button onclick="window.location.href='/info'">마이페이지</button>
+            <button>질문게시판</button>
+            <button onclick="logout()">로그아웃</button>
+        </nav>
+        <section class="time">
+            <h1 class="study_time">07:15:00</h1>
+            <article class="timeBtns">
+                <button href="#" class="mainBtn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button href="#" class="mainBtn">
+                    <i class="fas fa-pause"></i>
+                </button>
+            </article>
+        </section>
+      <section class="members">
+            <article
+            class="mem"
+            id="open-modal"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal_Kim"
+            >
+                <h2 class="mem_name">김준우</h2>
+                <p>만약 되면? 공부 중 표시, 각각 실시간 시간 띄워주기</p>
+            </article>
+            <article
+            class="mem"
+            id="open-modal"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal_Ans"
+            >
+                <h2 class="mem_name">안지수</h2>
+                <p>07:00:21</p>
+            <p>공부 중</p>
+            </article>
+            <article class="mem" id="open-modal">
+                <h2 class="mem_name">최정원</h2>
+                <p>07:00:21</p>
+                <p>공부 중</p>
+            </article>
+            <article class="mem" id="open-modal">
+                <h2 class="mem_name">한정은</h2>
+                <p>07:00:21</p>
+                <p>공부 중</p>
+            </article>
+        </section>
+        <!-- Modal -->
+        <div
+            class="modal fade"
+            id="exampleModal_Kim"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mem_img">
+                            <img
+                            src="static/img/temp_image.png"
+                            alt=""
+                            />
+                        </div>
+                        <div class="mem_info">
+                            <h2>김준우</h2>
+                            <a href="#" class="mem_info-TIL">TIL 주소</a>
+                            <div class="mem_info-hobbys">게임하기</div>
+                            <button type="button" class="mainBtn mem_info-alert">
+                            찌르기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="exampleModal_Ans"
+        tabindex="-2"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mem_img">
+                <img
+                  src="static/img/temp_image.png"
+                  alt=""
+                />
+              </div>
+              <div class="mem_info">
+                <h2>안지수</h2>
+                <a href="#" class="mem_info-TIL">TIL 주소</a>
+                <div class="mem_info-hobbys">게임하기</div>
+                <button type="button" class="mainBtn mem_info-alert">
+                  찌르기
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+userlist:    
+{
+    ID:"asdfg"
+    Info_list:
+        Hobby:""
+        Image_url:"null"
+        TIL_url: ""
+        nickname: "김준우"
+        [[Prototype]]: Object
+    NickName: "김준우"
+    Timer: 
+        CheckInTime: 0
+        CheckOutTime: 0
+        Flag: false
+        LessTime: 0
+        NickName: "김준우"
+        TimerOn: false
+        [[Prototype]]: Object
+    [[Prototype]]: Object
+}

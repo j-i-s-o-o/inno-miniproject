@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <title>마이페이지</title>
+  <link href="{{ url_for('static', filename='css/info.css') }}" rel="stylesheet" />
+</head>
+<script>
+  $(document).ready(function () {
+
+  });
+
+</script>
+
+<body>
+  <main>
+    <div class="title">마이페이지</div>
+    <form class="info_update">
+      <article>
+        <div class="info_update-title">프로필 사진</div>
+        <div class="info_profile-img">
+          <div id="info_update-img">
+            <img id="info-img" src="" alt="" />
+          </div>
+          <div class="info-filebox">
+            <label for="file" class="mainBtn fileBtn">파일찾기</label>
+            <input type="file" id="file" />
+            <div class="info_update-img-container">
+              <input id="imgOn" type="checkbox" />
+              <label for="imgOn" class="onOff">공개하기</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="info_update-title">비밀번호 변경</div>
+        <input id="info_update-pw" type="password" placeholder="********" />
+
+        <div class="info_update-title">닉네임</div>
+        <input id="info_update-nick" type="text" />
+
+        <div class="info_update-title">취미</div>
+        <div class="info_update-hobby-container">
+          <input id="info_update-hobby" type="text" />
+          <input id="hobbyOn" type="checkbox" />
+          <label for="hobbyOn" class="onOff">공개하기</label>
+        </div>
+
+        <div class="info_update-title">블로그 주소</div>
+        <div class="info_update-TIL-container">
+          <input id="info_update-TIL" type="text" />
+          <input id="TILOn" type="checkbox" />
+          <label for="TILOn" class="onOff">공개하기</label>
+        </div>
+      </article>
+      <div class="updateBtns">
+        <button onclick="window.location.href='/'" type="button" class="mainBtn updateBtn">
+          취소
+        </button>
+        <button onclick="update_info_sub()" type="button" class="mainBtn updateBtn">
+          수정
+        </button>
+      </div>
+    </form>
+  </main>
+  <script>
+    /*
+    pw_give : "null" //안바꾸면 null
+    Image
+    Image_boolean : true
+    Hobby
+    Hobby_boolean :
+    TIL_url
+    TIL_boolean :
+    */
+    const eventfile = document.querySelector("#file");
+    let oldFile;
+
+    eventfile.addEventListener("input", (e) => {
+      if (eventfile.files[0] != undefined) { // Jun : 파일 미 입력시 고정
+        oldFile = eventfile.files[0];
+        document.querySelector("#info-img").src = URL.createObjectURL(eventfile.files[0]);
+      }
+    });
+
+    function update_info_sub() { 
+      let pw = $("#info_update-pw").val();
+      let NickName = $("#info_update-nick").val();
+      let urlb = $("#imgOn").is(":checked");
+      let Hobby = $("#info_update-hobby").val();
+      let Hobbyb = $("#hobbyOn").is(":checked");;
+      let TIL = $("#info_update-TIL").val();
+      let TILb = $("#TILOn").is(":checked");
+
+      if (pw != "") {
+        const regex = /^[a-z0-9]+$/;
+        if (!regex.test(pw)){
+          console.log("pw.texterror");
+          return;
+        }
+        else if (pw.length < 8 || 12 < pw.length){
+          console.log("pw.lengtherror");
+          return;
+        }
+        else
+          $.ajax({
+            type: "POST",
+            url: "/api/mypage/password",
+            data: {
+              pw_give: pw,
+            },
+            success: function (response) {
+              console.log(response['result']);
+            }
+          });
+      }
+      if (NickName != "") {
+        const regex = /^[a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣0-9]+$/;
+        if(!regex.test(NickName)){
+          console.log("nick.texterror");
+          return;
+        }
+        if(NickName.length < 5){
+          console.log("nick.lengtherror");
+          return;
+        }
+        else
+          $.ajax({
+            type: "POST",
+            url: "/api/mypage/nick",
+            async:false,
+            data: {
+              nickname_give: NickName,
+            },
+            success: function (response) {
+              console.log(response['result']);
+            }
+          });
+      }
+      if(oldFile != undefined){
+        body = new FormData();
+        body.append("Image",oldFile);
+        for (var key of body.keys()) {
+          console.log(key);
+        }
+        for (var value of body.values()) {
+          console.log(value);
+        }
+        $.ajax({
+          type: "POST",
+          url: "/api/mypage/Image",
+          processData: false,
+          contentType: false,
+          data: body,
+          success: function (response) {
+            console.log(response['result']);
+          }
+        });
+      }
+      $.ajax({
+        type: "POST",
+        url: "/api/mypage/Other",
+        data: {
+          Image_boolean: urlb,
+          Hobby: Hobby,
+          Hobby_boolean: Hobbyb,
+          TIL_url: TIL,
+          TIL_boolean: TILb
+        },
+        success: function (response) {
+          console.log(response['result']);
+        }
+      })
+    }
+    function show_info() {
+      $.ajax({
+        type: "GET",
+        url: "/api/mypage",
+        data: {},
+        success: function (response) {
+          if (response['result'] == 'success') {
+            let Image_src = response['Image_url'] == "null"
+              ? "static/img/temp_image.png"
+              : response['Image_url'];
+            document.querySelector("#info-img").src = Image_src;
+            $("#imgOn").attr("checked", response['Image_boolean']);
+            $("#info_update-hobby").attr("value", response['Hobby']);
+            $("#hobbyOn").attr("checked", response['Hobby_boolean']);
+            $("#info_update-TIL").attr("value", response['TIL_url']);
+            $("#TILOn").attr("checked", response['TIL_boolean']);
+            $("#info_update-nick").attr("placeholder", response['NickName']);
+          } else {
+            alert(response['msg']);
+          }
+        }
+      })
+    }
+    show_info();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+# 1. 회원가입 세팅 V PW V ID V NICK
+# 2. DB 병렬화 V
+# 3. 회원 수정 정보 DB 세팅 (2) V
+5. api추가 (타이머)
+#    1. 타이머 checkin V
+#    2. 타이머 checkout V
+#    3. 타이머 실행 여부 확인 V
+    4. 타이머 일시정지(lesstime) 
+#6. infoDB 변경할때 쿠키 받을것 (보안) V
+7. 질문방 제작.
+#    1. 질문 작성 시 쿠키 받아서 ID NICK 넣을것 V
+#    2. 삭제할 때도 쿠키 받아서 ID 확인 V
+    3. 댓글 기능 첨부할 때 css 확인 
+
+(긴급)
+# 1. DB 전부 수정 V
+2. CRACKED 수정
+
+(06-09)
+(V)1. register 입력 V
+(X)2. login 오류 해결 V
+(X)3. main 멤버 카드 (DB) 
+(X)4. main 멤버 카드 연결 
+(X)5. mypage 연동 (DB)
+(X)6. mypage 수정 (DB) 
+(X)7. mypage 연동 (homepage) 
+(X)8. mypage 수정 (homepage)  
+#######
+(X)9. 타이머 일시정지(lesstime) 
+(X)10. 질문방 수정 (DB)
+(X)11. register 입력 
+(X)12. register 입력 
+(X)13. register 입력 
+
+# less time maunal
+a. refresh token(1 month) / moule token(refresh 1time) / access token(30 min) 나누기 

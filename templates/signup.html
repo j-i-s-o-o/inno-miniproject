@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>회원가입</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+    />
+    <link
+      href="{{ url_for('static', filename='css/signup.css') }}"
+      rel="stylesheet"
+    />
+  </head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+  <script src="{{ url_for('static', filename='js/signup.js') }}"></script>
+  <script>
+    function releasetoken() {
+      let result;
+      $.ajax({
+        type: "GET",
+        url: "/api/login_check",
+        async: false,
+        data: {},
+        success: function (response) {
+          if (response["result"] == "success") result = true;
+          else result = false;
+        },
+      });
+      return result;
+    }
+    $(document).ready(() => {
+      if (releasetoken()) window.location.href = "/";
+    });
+  </script>
+  <body>
+    <main>
+      <div class="title">회원가입</div>
+      <form class="signup">
+        <div class="signup_container">
+          <div class="field_container">
+            <div class="field is-horizontal">
+              <div class="field-label is-normal id">
+                <label class="label" for="userid">ID</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control id">
+                    <input
+                      type="text"
+                      class="input"
+                      id="userid"
+                      aria-describedby="emailHelp"
+                      placeholder="My ID"
+                      value=""
+                    />
+                    <label id="useridaccess"></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal pw">
+                <label class="label" for="userpw">PW</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control pw">
+                    <input
+                      type="password"
+                      class="input"
+                      id="userpw"
+                      placeholder="My Password"
+                    />
+                    <ul id="userpwaccess">
+                      <li>X lower a</li>
+                      <li>X 8 - 12 char</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="usernick">NICKNAME</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control nick">
+                    <input
+                      type="text"
+                      class="input"
+                      id="usernick"
+                      placeholder="My Nickname"
+                    />
+                    <label id="usernickaccess"></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="register_container">
+            <button type="button" class="button regitBtns" onclick="register()">
+              회원가입
+            </button>
+            <button
+              type="button"
+              class="button regitBtns"
+              onclick="erazertoken()"
+            >
+              로그인
+            </button>
+          </div>
+        </div>
+      </form>
+    </main>
+    <script src="{{ url_for('static', filename='js/singup_body.js') }}"></script>
+  </body>
+</html>
